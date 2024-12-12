@@ -129,7 +129,7 @@ public class ArrayDequeTest {
     }
 
     @Test
-    public void equals() {
+    public void testEquals() {
         ArrayDeque<Integer> input = new ArrayDeque<>();
         input.addLast(10);
         input.addLast(5);
