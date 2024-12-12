@@ -2,7 +2,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class ArrayDeque<T> implements Deque<T> {
+public class ArrayDeque<T> implements Deque<T>,Iterable<T> {
     private T[] arr;
     private int size;
     protected int first;
@@ -20,7 +20,7 @@ public class ArrayDeque<T> implements Deque<T> {
         if(size==arr.length) {
             resize(2);
         }
-        
+
         arr[first] = item;
         first = Math.floorMod(first-1,arr.length);
         size++;
@@ -120,7 +120,7 @@ public class ArrayDeque<T> implements Deque<T> {
         return true;
     }
 
-    /*@Override
+    @Override
     public Iterator<T> iterator(){
         return new ArrayDequeIterator();
     }
@@ -138,7 +138,7 @@ public class ArrayDeque<T> implements Deque<T> {
         public T hasNext(){
             return arr[pos++];
         }
-    }*/
+    }
 
 
 
