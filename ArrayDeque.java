@@ -1,8 +1,10 @@
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Comparator;
 
-public class ArrayDeque<T> implements Deque<T>,Iterable<T> {
+public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
     private T[] arr;
     private int size;
     protected int first;
@@ -20,9 +22,9 @@ public class ArrayDeque<T> implements Deque<T>,Iterable<T> {
         if(size==arr.length) {
             resize(2);
         }
-
         arr[first] = item;
-        first = Math.floorMod(first-1,arr.length);
+       // first = Math.floorMod(first-1,arr.length);
+        first = (first+arr.length-1)%arr.length;
         size++;
     }
 
@@ -30,20 +32,19 @@ public class ArrayDeque<T> implements Deque<T>,Iterable<T> {
         if(size==arr.length) {
             resize(2);
         }
-
         arr[last] = item;
-        last = (last+arr.length+1) % arr.length;
+       last = (last+arr.length+1) % arr.length;
 
         size++;
     }
 // don't resize with arraycopy
     public void resize(int refactor){
-        T[] newArr =(T[]) new Object[arr.length * refactor];
+       T[] newArr =(T[]) new Object[arr.length * refactor];
         for(int i =0;i<size;i++){
             newArr[i+1] = get(i);
         }
         first = 0;
-        last = first+size+1;
+       last = first+size+1;
         arr = newArr;
     }
 
@@ -79,7 +80,7 @@ public class ArrayDeque<T> implements Deque<T>,Iterable<T> {
     }
 
     public T get(int index){
-        return arr[(first+1+index)%arr.length];
+        return arr[(first+1+index) % arr.length];
     }
 
     public void printDeque() {
@@ -99,25 +100,31 @@ public class ArrayDeque<T> implements Deque<T>,Iterable<T> {
 
     @Override
     public String toString(){
-        String ret = "";
-        for(int i = 0;i<size();i++){
-            ret += get(i) + " ";
+        StringBuilder ret = new StringBuilder("{");
+        for(int i =0;i<size()-1;i++){
+            ret.append(arr[i]+", ");
         }
-        return ret;
+        ret.append(arr[size()-1]+"}");
+        return ret.toString();
     }
 
     @Override
     public boolean equals(Object other){
-        ArrayDeque obj = (ArrayDeque) other;
-        if(arr.size()!=other.size()){
-            return false;
+        if(this == other){
+            return true;
         }
-        for(int i=0;i<arr.size();i++){
-            if(arr.get(i)!=other.get(i)){
+        if(other instanceof ArrayDeque o){
+            if (size() != o.size()) {
                 return false;
+            }
+            for (int i = 0; i < size(); i++) {
+                if (get(i) != o.get(i)) {
+                    return false;
+                }
             }
         }
         return true;
+
     }
 
     @Override
@@ -132,31 +139,14 @@ public class ArrayDeque<T> implements Deque<T>,Iterable<T> {
         }
 
         public T next(){
-            return (pos<size());
-        }
-
-        public T hasNext(){
             return arr[pos++];
         }
+
+        public boolean hasNext(){
+            return (pos<size());
+        }
     }
 
-
-
-    public static void main(String[] args) {
-        ArrayDeque<Double> deck = new ArrayDeque<>();
-        deck.addLast(2.3);
-        deck.addLast(0.0);
-        deck.addFirst(4.7);
-        deck.addLast(2.3);
-        deck.addLast(0.0);
-        deck.addFirst(4.7);
-        deck.addLast(2.3);
-        deck.addLast(0.0);
-        deck.resize(2);
-        deck.addFirst(4.7);
-        System.out.println(deck);
-        System.out.println(deck.toString());
-    }
 
     }
 
